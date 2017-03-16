@@ -1,4 +1,5 @@
 class TodosController < ApplicationController
+  before_action :set_todo, only: [:edit, :update, :show, :destroy]
   
   def new
     @todo = Todo.new
@@ -8,7 +9,6 @@ class TodosController < ApplicationController
     @todo = Todo.new(todo_params)
     if @todo.save
       flash[:notice] = "Todo was succesfully created."
-      flash[:notice2] = "Todo was succesfully created 22."
       redirect_to todo_path(@todo)
     else
       render 'new'
@@ -16,15 +16,12 @@ class TodosController < ApplicationController
   end
   
   def show
-    @todo = Todo.find(params[:id])
   end
   
   def edit
-    @todo = Todo.find(params[:id])
   end
   
   def update
-    @todo = Todo.find(params[:id])
     if @todo.update(todo_params)
       flash[:notice] = "Todo was succesfully updated."
       redirect_to todo_path(@todo)
@@ -38,7 +35,6 @@ class TodosController < ApplicationController
   end
   
   def destroy
-    @todo = Todo.find(params[:id])
     @todo.destroy
     flash[:notice] = "Todo was deleted succesfully."
     redirect_to todos_path
@@ -48,6 +44,10 @@ class TodosController < ApplicationController
   
     def todo_params
       params.require(:todo).permit(:name, :description)
+    end
+    
+    def set_todo
+      @todo = Todo.find(params[:id])
     end
   
 end
